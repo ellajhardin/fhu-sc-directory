@@ -16,7 +16,7 @@ export default function HomeScreen() {
   const [people, setPeople] = useState<Person[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(() => { 
   const loadPeople = async () => {
     try {
       const data = await getPeople(); // wait for Appwrite to return the JSON
