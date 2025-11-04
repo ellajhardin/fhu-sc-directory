@@ -1,12 +1,13 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Person } from "./types";
 
 export default function Card({ person }: { person: Person }) {
   return (
     <TouchableOpacity style={styles.card}>
-      <Text style={styles.name}>{person.name}</Text>
-      <Text style={styles.year}>{person.year}</Text>
-      <Text style={styles.year}>{person.relationshipStatus}</Text>
+      <Image source={{ uri: person.imageURL }} style={styles.image} />
+      <Text style={styles.name}>{person.firstName} {person.lastName}</Text>
+      <Text style={styles.classification}>{person.classification}</Text>
+      <Text style={styles.classification}>{person.relationshipStatus}</Text>
     </TouchableOpacity>
   );
 }
@@ -22,11 +23,20 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 20, // circular
+    marginBottom: 12,
+  },
   name: {
     fontWeight: "bold",
     fontSize: 18,
+    paddingBottom: 5,
+    textAlign: "center",
   },
-  year: {
+  classification: {
     fontSize: 15,
-  }
+    textAlign: "center",
+  },
 });
