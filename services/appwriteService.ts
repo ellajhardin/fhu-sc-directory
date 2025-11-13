@@ -1,5 +1,5 @@
 import { Person } from "@/components/types";
-import { Client, Storage } from "appwrite";
+import { Account, TablesDB, Client, Storage, Models, Query,  } from "appwrite";
 
 const client = new Client()
   .setEndpoint("https://nyc.cloud.appwrite.io/v1")
@@ -9,9 +9,63 @@ const storage = new Storage(client);
 
 const bucketId = "68f8ed1c002b1e260b7c"; 
 const fileId = "690953e50024a60aa15b"; 
+const membersTableId = "members";
+const databaseId = "social-club-db"
+
+export interface type MemberRow = {
+  firstName: string,
+  lastName: string,
+  email: string,
+  club?: string,
+  userID: string,
+  phone?: string,
+  email?: string,
+}
 
 
-export async function getPeople(): Promise<Person[]> {
+export function createAppWriteService(config) {
+  const account = new Account(client)
+  const tables = new TablesDB(client)
+
+  // AUTH
+  const reigsterWithEmail = async ({
+
+  });
+
+  //OTHER FUNCTIONS
+
+
+  //MEMBERS DATABASE STUFF
+  const getMemberByUserID = async( userID: string):Promise<MemberRow> => {
+
+    const response = await tables.listRows<MemberRow>( {
+      databaseId: databaseId,
+      tableId: membersTableId,
+      queries: [Query.equal('userID', userID), Query.limit(1)]
+    })
+
+    return response.rows[0] ?? null
+  }
+
+
+  return {
+    // low-level objects
+    client,
+    account,
+    tables,
+
+    // high-level helpers
+    getCurrentUser,
+    registerWithEmail,
+    loginWithEmail,
+    logoutCurrentDevice,
+
+    getMemberByUserID
+  }
+
+}
+
+/*export async function getPeople(): Promise<Person[]> {
   try {
     // Get the public view URL for the file
     const fileUrl = storage.getFileView(bucketId, fileId);
@@ -26,4 +80,4 @@ export async function getPeople(): Promise<Person[]> {
     console.error("Appwrite fetch error:", error);
     return [];
   }
-}
+}*/
