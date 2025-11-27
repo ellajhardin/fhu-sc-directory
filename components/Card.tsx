@@ -1,13 +1,31 @@
+import { MemberRow } from "@/lib/appwrite";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { Person } from "./types";
 
-export default function Card({ person }: { person: Person }) {
+export default function Card({ person }: { person: MemberRow }) {
+  // If you add a profile picture field later, put it here
+  const placeholderImage =
+    "https://ui-avatars.com/api/?name=" +
+    `${person.firstName}+${person.lastName}&background=random`;
+
   return (
     <TouchableOpacity style={styles.card}>
-      <Image source={{ uri: person.imageURL }} style={styles.image} />
-      <Text style={styles.name}>{person.firstName} {person.lastName}</Text>
-      <Text style={styles.classification}>{person.classification}</Text>
-      <Text style={styles.classification}>{person.relationshipStatus}</Text>
+      <Image source={{ uri: placeholderImage }} style={styles.image} />
+
+      <Text style={styles.name}>
+        {person.firstName} {person.lastName}
+      </Text>
+
+      {person.classification && (
+        <Text style={styles.subtext}>{person.classification}</Text>
+      )}
+
+      {person.relationshipStatus && (
+        <Text style={styles.subtext}>{person.relationshipStatus}</Text>
+      )}
+
+      {person.officer && (
+        <Text style={styles.officer}>Officer: {person.officer}</Text>
+      )}
     </TouchableOpacity>
   );
 }
@@ -22,21 +40,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    alignItems: "center",
+    gap: 6,
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 20, // circular
-    marginBottom: 12,
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    marginBottom: 8,
   },
   name: {
     fontWeight: "bold",
     fontSize: 18,
-    paddingBottom: 5,
     textAlign: "center",
   },
-  classification: {
-    fontSize: 15,
-    textAlign: "center",
+  subtext: {
+    fontSize: 14,
+    opacity: 0.8,
+  },
+  officer: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginTop: 4,
   },
 });

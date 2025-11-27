@@ -34,6 +34,8 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
-  }
+    },
+    "sdkVersion": "54.0.0"
+  },
+  "name": "fhu-sc-directory"
 }

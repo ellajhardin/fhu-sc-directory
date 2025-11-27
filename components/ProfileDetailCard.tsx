@@ -1,30 +1,63 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Person } from "./types";
+import { MemberRow } from "@/lib/appwrite";
+import { Image, StyleSheet, Text, View } from "react-native";
 
-export default function ProfileDetailCard({ person }: { person: Person }) {
+export default function ProfileDetailCard({ person }: { person: MemberRow }) {
+
+const profileImage =
+    person.imageURL && person.imageURL.length > 0
+      ? person.imageURL
+      : `https://ui-avatars.com/api/?name=${person.firstName}+${person.lastName}&size=256&background=random`;
+
   return (
     <View style={styles.card}>
-      <Text style={styles.name}>{person.firstName}</Text>
-      <Text style={styles.name}>{person.lastName}</Text>
-      <Text>{person.classification}</Text>
-      <Text>{person.relationshipStatus}</Text>
-      {person.phone && <Text>📞 {person.phone}</Text>}
-      {person.email && <Text>📧 {person.email}</Text>}
-      {person.officer && <Text>🏛️ Officer: {person.officer}</Text>}
+      <Image source={{ uri: profileImage }} style={styles.image} />
+
+      <Text style={styles.name}>
+        {person.firstName} {person.lastName}
+      </Text>
+
+      {person.classification && (
+        <Text style={styles.field}>{person.classification}</Text>
+      )}
+
+      {person.relationshipStatus && (
+        <Text style={styles.field}>{person.relationshipStatus}</Text>
+      )}
+
+      {person.officer && (
+        <Text style={styles.field}>Officer: {person.officer}</Text>
+      )}
+
+      {person.phone && <Text style={styles.field}>{person.phone}</Text>}
+      {person.email && <Text style={styles.field}>{person.email}</Text>}
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     padding: 20,
     borderRadius: 12,
-    elevation: 3,
+    elevation: 2,
+    alignItems: "center",
+    gap: 10,
+  },
+  image: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    marginBottom: 16,
   },
   name: {
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: 10,
+  },
+  field: {
+    fontSize: 18,
+    marginBottom: 6,
+    textAlign: "center",
   },
 });

@@ -1,10 +1,12 @@
 import {
-    Account,
-    Client,
-    ID,
-    Models,
-    Query,
-    TablesDB,
+  Account,
+  Client,
+  ID,
+  Models,
+  Permission,
+  Query,
+  Role,
+  TablesDB,
 } from "react-native-appwrite";
 import "react-native-url-polyfill/auto";
 
@@ -39,18 +41,30 @@ export interface MemberRow extends Models.Row {
   firstName: string;
   lastName: string;
   userID: string;
-  club?: string | undefined;
-  phone?: string | undefined;
-  email?: string | undefined;
+  club?: string;
+  phone?: string;
+  email?: string;
+
+  // NEW FIELDS ⬇️
+  classification?: string;
+  relationshipStatus?: string;
+  imageURL?: string;
+  officer?: string;
 }
 
 export type MemberInput = {
   firstName?: string;
   lastName?: string;
   userID?: string;
-  club?: string | undefined;
-  phone?: string | undefined;
-  email?: string | undefined;
+  club?: string;
+  phone?: string;
+  email?: string;
+
+  // NEW FIELDS
+  classification?: string;
+  relationshipStatus?: string;
+  imageURL?: string;
+  officer?: string;
 };
 
 export type AppWriteConfig = {
@@ -87,10 +101,28 @@ export function createAppWriteService(config: AppWriteConfig) {
     club: string;
   }): Promise<Models.User<Models.Preferences> | null> => {
     try {
+      // Create the user account
       await account.create({ userId: ID.unique(), email, password, name });
+
+      // Create session for the newly created user
       await account.createEmailPasswordSession({ email, password });
       const user = await account.get<Models.User<Models.Preferences>>();
-      await createMemberForUser(user, { email, phone, club });
+
+      try {
+        await createMemberForUser(user, { email, phone, club });
+      } catch (memberError: any) {
+        console.error(
+          "[registerWithEmail] Error creating member row:",
+          {
+            message: memberError?.message,
+            code: memberError?.code,
+            status: memberError?.status,
+            type: memberError?.type,
+            details: memberError,
+          }
+        );
+        throw new Error("Registration succeeded but failed to create profile. Please contact support.");
+      }
 
       return user;
     } catch (exception) {
@@ -173,16 +205,21 @@ export function createAppWriteService(config: AppWriteConfig) {
         firstName: extra?.firstName ?? firstName,
         lastName: extra?.lastName ?? lastName,
         userID: user.$id,
-        club: extra?.club ?? undefined,
-        phone: extra?.phone ?? undefined,
+        club: extra?.club,
+        phone: extra?.phone,
         email,
+
+        // NEW FIELDS
+        classification: extra?.classification ?? "",
+        relationshipStatus: extra?.relationshipStatus ?? "",
+        imageURL: extra?.imageURL ?? "",
+        officer: extra?.officer ?? "",
       },
-      // You can add explicit permissions here if you prefer:
-      // permissions: [
-      //   Permission.read(Role.user(user.$id)),
-      //   Permission.update(Role.user(user.$id)),
-      //   Permission.delete(Role.user(user.$id)),
-      // ],
+      permissions: [
+        Permission.read(Role.user(user.$id)),
+        Permission.update(Role.user(user.$id)),
+        Permission.delete(Role.user(user.$id)),
+      ],
     });
   };
 
@@ -195,16 +232,16 @@ export function createAppWriteService(config: AppWriteConfig) {
   };
 
   const updateMember = async (
-    rowId: string,
-    data: Partial<MemberInput>
-  ): Promise<MemberRow> => {
-    return tables.updateRow<MemberRow>({
-      databaseId: config.databaseId,
-      tableId: config.membersTableId,
-      rowId,
-      data,
-    });
-  };
+  rowId: string,
+  data: Partial<MemberInput>
+): Promise<MemberRow> => {
+  return tables.updateRow<MemberRow>({
+    databaseId: config.databaseId,
+    tableId: config.membersTableId,
+    rowId,
+    data,
+  });
+};
 
   const getMembers = async (club: string) => {
     try {
@@ -220,6 +257,19 @@ export function createAppWriteService(config: AppWriteConfig) {
       return null;
     }
   };
+
+  const getMemberById = async (rowId: string): Promise<MemberRow | null> => {
+  try {
+    return await tables.getRow<MemberRow>({
+      databaseId: config.databaseId,
+      tableId: config.membersTableId,
+      rowId,
+    });
+  } catch (error) {
+    console.error("[getMemberById] Error:", error);
+    return null;
+  }
+};
 
   return {
     // low-level objects
@@ -239,5 +289,6 @@ export function createAppWriteService(config: AppWriteConfig) {
     updateMember,
 
     getMembers,
+    getMemberById,
   };
 }

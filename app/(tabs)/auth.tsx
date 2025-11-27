@@ -1,13 +1,13 @@
 import { useAuth } from "@/hooks/AuthContext";
 import React, { useState } from "react";
 import {
-    ActivityIndicator,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 export default function AuthScreen() {
@@ -51,14 +51,6 @@ export default function AuthScreen() {
     }
   }
 
-  if (error) {
-    return (
-      <View style={styles.center}>
-        <Text style={styles.errorText}>{error}</Text>
-      </View>
-    );
-  }
-
   if (loading) {
     // still checking existing session
     return (
@@ -74,7 +66,7 @@ export default function AuthScreen() {
     return (
       <ScrollView style={styles.scrollview}>
         <View style={styles.container}>
-          <Text style={styles.title}>Welcome 👋</Text>
+          <Text style={styles.title}>Welcome</Text>
           <Text style={styles.label}>Name (from User)</Text>
           <Text style={styles.value}>{user.name}</Text>
           <Text style={styles.label}>Name (from Member)</Text>
@@ -123,9 +115,10 @@ export default function AuthScreen() {
 
             <Text style={styles.label}>Club</Text>
             <TextInput
+              autoCapitalize="none"
               style={styles.input}
               value={club}
-              onChangeText={setClub}
+              onChangeText={(text) => setClub(text.toLowerCase())}
               placeholder="xbx"
             />
 
@@ -198,37 +191,37 @@ const styles = StyleSheet.create({
   },
   scrollview: {
     flex: 1,
-    backgroundColor: "#0a0a0a",
+    backgroundColor: "#f7f7f7",
   },
   container: {
     flex: 1,
     paddingTop: 96,
     paddingHorizontal: 24,
-    backgroundColor: "#0a0a0a",
+    backgroundColor: "#f7f7f7",
   },
   title: {
     fontSize: 28,
     fontWeight: "600",
-    color: "white",
+    color: "#222",
     marginBottom: 32,
   },
   label: {
-    color: "#aaa",
+    color: "#555",
     fontSize: 14,
     marginBottom: 6,
   },
   value: {
-    color: "white",
+    color: "#222",
     fontSize: 16,
     fontWeight: "500",
     marginBottom: 16,
   },
   input: {
     width: "100%",
-    borderColor: "#333",
+    borderColor: "#ccc",
     borderWidth: 1,
-    backgroundColor: "#1a1a1a",
-    color: "white",
+    backgroundColor: "#fff",
+    color: "#222",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -237,7 +230,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "100%",
-    backgroundColor: "white",
+    backgroundColor: "#456",
     borderRadius: 8,
     alignItems: "center",
     paddingVertical: 14,
@@ -248,18 +241,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#ff4d4d",
   },
   buttonText: {
-    color: "black",
+    color: "white",
     fontWeight: "600",
     fontSize: 16,
   },
   linkText: {
-    color: "#5ea0ff",
+    color: "#456",
     textAlign: "center",
     fontSize: 14,
     fontWeight: "500",
   },
   errorText: {
-    color: "#ff6b6b",
+    color: "#d9534f",
     marginBottom: 12,
   },
 });

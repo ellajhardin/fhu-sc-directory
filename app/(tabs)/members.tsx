@@ -40,13 +40,13 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView>
-      <Text style={styles.title}>Directory</Text>
+      <Text style={styles.title}>FHU EVENTS</Text>
     <ScrollView>
       <View style={{ padding: 16 }}>
         {people.map((person) => (
           <Link
             key={person.$id}
-            href={{ pathname: "/profile/[id]", params: { id: person.$id } }}
+            href={`/(protected)/members/${person.$id}`}
             asChild
           >
             <Card person={person} />

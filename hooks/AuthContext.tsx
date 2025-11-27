@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = useCallback(
     async (email: string, password: string) => {
       setLoading(true);
-      setError("");
+      setError(null);
       try {
         const loggedInUser = await appwriteService.loginWithEmail({
           email,
@@ -59,6 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
         if (!loggedInUser) {
           setError("Login failed. Check your credentials.");
+          return;
         } else {
           setUser(loggedInUser);
           const member = await appwriteService.getMemberByUserId(
@@ -84,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       club: string
     ) => {
       setLoading(true);
-      setError("");
+      setError(null);
       try {
         const loggedInUser = await appwriteService.registerWithEmail({
           email,
@@ -95,6 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
         if (!loggedInUser) {
           setError("Registration failed. Please try again.");
+          return;
         } else {
           setUser(loggedInUser);
           const member = await appwriteService.getMemberByUserId(
@@ -113,7 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(async () => {
     setLoading(true);
-    setError("");
+    setError(null);
     try {
       await appwriteService.logoutCurrentDevice();
       setUser(null);
@@ -127,7 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const loadAuthState = useCallback(async () => {
     setLoading(true);
-    setError("");
+    setError(null);
     try {
       const loggedInUser = await appwriteService.getCurrentUser();
       if (loggedInUser) {
