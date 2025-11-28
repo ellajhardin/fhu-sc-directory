@@ -13,15 +13,24 @@ export default function ProfilePage() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>My Profile</Text>
 
-      <Text>Name: {user?.name}</Text>
-      <Text>Email: {user?.email}</Text>
-      <Text>Club: {member?.club}</Text>
+      <View style={styles.infoBlock}>
+        <Text style={styles.title}>My Profile</Text>
+
+        <Text style={styles.label}>Name</Text>
+        <Text style={styles.value}>{user?.name}</Text>
+
+        <Text style={styles.label}>Email</Text>
+        <Text style={styles.value}>{user?.email}</Text>
+
+        <Text style={styles.label}>Club</Text>
+        <Text style={styles.value}>{member?.club}</Text>
+      </View>
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Log Out</Text>
       </TouchableOpacity>
+
     </View>
   );
 }
@@ -29,22 +38,41 @@ export default function ProfilePage() {
 const styles = StyleSheet.create({
   container: { 
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 12
+    padding: 20,
   },
+
+  infoBlock: {
+    marginTop: 40,
+    alignItems: "center",
+  },
+
   title: {
     fontSize: 40,
     marginBottom: 20,
     fontWeight: "600",
+    textAlign: "center",
   },
+
+  label: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginTop: 15,
+  },
+
+  value: {
+    fontSize: 20,
+    marginTop: 4,
+  },
+
   logoutButton: {
-    marginTop: 30,
+    marginTop: "auto", 
     paddingVertical: 12,
     paddingHorizontal: 24,
     backgroundColor: "#E53935",
     borderRadius: 10,
+    alignSelf: "center",
   },
+
   logoutText: {
     color: "white",
     fontSize: 18,

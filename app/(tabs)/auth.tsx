@@ -64,31 +64,12 @@ export default function AuthScreen() {
   // if logged in, show a simple profile + logout
   if (user) {
     return (
-      <ScrollView style={styles.scrollview}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Welcome</Text>
-          <Text style={styles.label}>Name (from User)</Text>
-          <Text style={styles.value}>{user.name}</Text>
-          <Text style={styles.label}>Name (from Member)</Text>
+      <ScrollView style={styles.scrollview} contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.welcome}>
+          <Text style={styles.header}>Welcome</Text>
           <Text style={styles.value}>
             {member?.firstName} {member?.lastName}
           </Text>
-          <Text style={styles.label}>Email (from User)</Text>
-          <Text style={styles.value}>{user.email}</Text>
-          <Text style={styles.label}>Email(from Member)</Text>
-          <Text style={styles.value}>{member?.email}</Text>
-          <Text style={styles.label}>Phone (from Member)</Text>
-          <Text style={styles.value}>{member?.phone}</Text>
-          <Text style={styles.label}>Club (from Member)</Text>
-          <Text style={styles.value}>{member?.club}</Text>
-
-          <TouchableOpacity
-            style={[styles.button, styles.logoutButton]}
-            onPress={logout}
-            disabled={submitting}
-          >
-            <Text style={styles.buttonText}>Log out</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
     );
@@ -179,7 +160,7 @@ export default function AuthScreen() {
         </TouchableOpacity>
       </View>
     </ScrollView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -207,12 +188,12 @@ const styles = StyleSheet.create({
   },
   label: {
     color: "#555",
-    fontSize: 14,
+    fontSize: 24,
     marginBottom: 6,
   },
   value: {
     color: "#222",
-    fontSize: 16,
+    fontSize: 26,
     fontWeight: "500",
     marginBottom: 16,
   },
@@ -254,5 +235,16 @@ const styles = StyleSheet.create({
   errorText: {
     color: "#d9534f",
     marginBottom: 12,
+  },
+  welcome: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    textAlign: "center",
+    fontSize: 40,
+    fontWeight: "600",
+    paddingTop: 10,
   },
 });

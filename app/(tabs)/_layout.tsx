@@ -65,7 +65,7 @@ import { Tabs } from "expo-router";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
@@ -80,12 +80,21 @@ export default function TabsLayout() {
         headerShown: false,
       }}
     >
+      <Tabs.Screen
+        name="index"
+        options={{
+          href: null, // hide the tab
+        }}
+      />
+      
       {/* PUBLIC EVENTS */}
       <Tabs.Screen
         name="events"
         options={{
           title: "Events",
-          tabBarIcon: ({ color }) => <TabBarIcon name="calendar" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="calendar" color={color} />
+          ),
         }}
       />
 
@@ -95,7 +104,9 @@ export default function TabsLayout() {
           name="members"
           options={{
             title: "Members",
-            tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="users" color={color} />
+            ),
           }}
         />
       ) : (
@@ -131,7 +142,9 @@ export default function TabsLayout() {
           name="auth"
           options={{
             title: "Login",
-            tabBarIcon: ({ color }) => <TabBarIcon name="sign-in" color={color} />,
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="sign-in" color={color} />
+            ),
           }}
         />
       ) : (
@@ -145,5 +158,3 @@ export default function TabsLayout() {
     </Tabs>
   );
 }
-
-

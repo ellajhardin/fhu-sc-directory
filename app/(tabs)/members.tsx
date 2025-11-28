@@ -40,7 +40,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView>
-      <Text style={styles.title}>FHU EVENTS</Text>
+      <Text style={styles.title}>Directory</Text>
     <ScrollView>
       <View style={{ padding: 16 }}>
         {people.map((person) => (

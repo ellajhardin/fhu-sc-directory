@@ -1,11 +1,12 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EventsPage() {
   return (
     <ScrollView style={styles.container}>
+      <SafeAreaView>
       <Text style={styles.title}>Upcoming Events</Text>
 
-      {/* Example events list */}
       <View style={styles.event}>
         <Text style={styles.eventTitle}>Welcome Mixer</Text>
         <Text style={styles.eventDate}>Jan 15 • 7 PM</Text>
@@ -15,6 +16,7 @@ export default function EventsPage() {
         <Text style={styles.eventTitle}>Winter Retreat</Text>
         <Text style={styles.eventDate}>Jan 30 • 9 AM</Text>
       </View>
+      </SafeAreaView>
     </ScrollView>
   );
 }
