@@ -1,5 +1,6 @@
 import Card from "@/components/Card";
 import SearchBar from "@/components/SearchBar";
+import { useAuth } from "@/hooks/AuthContext";
 import {
   APPWRITE_CONFIG,
   createAppWriteService,
@@ -21,6 +22,8 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
+  const { member } = useAuth();
+
   const appWriteService = useMemo(
     () => createAppWriteService(APPWRITE_CONFIG),
     []
@@ -28,15 +31,21 @@ export default function HomeScreen() {
 
   const loadPeople = useCallback(async () => {
     try {
-      // Load members from the "xbx" club (you can change this to fetch all clubs)
-      const data = await appWriteService.getMembers("xbx");
+      // Load members from the user's club
+      if (!member?.club) return;
+
+      const data = await appWriteService.getMembers(member.club);
+
+
       setPeople(data || []);
+
+
     } catch (error) {
       console.error("Error loading people:", error);
     } finally {
       setLoading(false);
     }
-  }, [appWriteService]);
+  }, [appWriteService, member]);
 
   useEffect(() => {
     loadPeople();
