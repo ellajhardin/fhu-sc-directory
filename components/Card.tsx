@@ -1,14 +1,15 @@
 import { MemberRow } from "@/lib/appwrite";
+import { useRouter } from "expo-router";
 import { GraduationCap, Heart, Lectern } from "lucide-react-native";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Card({ person }: { person: MemberRow }) {
-  const placeholderImage =
-    "https://ui-avatars.com/api/?name=" +
-    `${person.firstName}+${person.lastName}&background=random`;
+
+  const router = useRouter();
 
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={styles.card}
+      onPress={() => router.push(`/(protected)/members/${person.$id}`)}>
       <Image source={{ uri: person.imageURL }} style={styles.image} />
 
     <View style={styles.infoWrapper}>

@@ -3,14 +3,9 @@ import { Image, StyleSheet, Text, View } from "react-native";
 
 export default function ProfileDetailCard({ person }: { person: MemberRow }) {
 
-const profileImage =
-    person.imageURL && person.imageURL.length > 0
-      ? person.imageURL
-      : `https://ui-avatars.com/api/?name=${person.firstName}+${person.lastName}&size=256&background=random`;
-
   return (
     <View style={styles.card}>
-      <Image source={{ uri: profileImage }} style={styles.image} />
+      <Image source={{ uri: person.imageURL }} style={styles.image} />
 
       <Text style={styles.name}>
         {person.firstName} {person.lastName}
@@ -45,9 +40,9 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   image: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
+    width: 160,
+    height: 160,
+    borderRadius: 10,
     marginBottom: 16,
   },
   name: {
