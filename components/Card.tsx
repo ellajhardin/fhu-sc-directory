@@ -1,37 +1,53 @@
 import { MemberRow } from "@/lib/appwrite";
-import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { GraduationCap, Heart, Lectern } from "lucide-react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Card({ person }: { person: MemberRow }) {
-  // If you add a profile picture field later, put it here
   const placeholderImage =
     "https://ui-avatars.com/api/?name=" +
     `${person.firstName}+${person.lastName}&background=random`;
 
   return (
     <TouchableOpacity style={styles.card}>
-      <Image source={{ uri: placeholderImage }} style={styles.image} />
+      <Image source={{ uri: person.imageURL }} style={styles.image} />
 
-      <Text style={styles.name}>
-        {person.firstName} {person.lastName}
-      </Text>
+    <View style={styles.infoWrapper}>
+      <View style={styles.infoContainer}>
+        <Text style={styles.name}>
+          {person.firstName} {person.lastName}
+        </Text>
 
-      {person.classification && (
-        <Text style={styles.subtext}>{person.classification}</Text>
-      )}
+        {person.classification && (
+          <View style={styles.row}>
+            <GraduationCap size={18} />
+            <Text style={styles.subtext}>{person.classification}</Text>
+          </View>
+        )}
 
-      {person.relationshipStatus && (
-        <Text style={styles.subtext}>{person.relationshipStatus}</Text>
-      )}
+        {person.relationshipStatus && (
+          <View style={styles.row}>
+            <Heart size={17} />
+            <Text style={styles.subtext}>{person.relationshipStatus}</Text>
+          </View>
+        )}
 
-      {person.officer && (
-        <Text style={styles.officer}>Officer: {person.officer}</Text>
-      )}
+        {person.officer && (
+          <View style={styles.row}>
+            <Lectern size={17} />
+            <Text style={styles.officer}>Officer: {person.officer}</Text>
+          </View>
+        )}
+
+      </View>
+    </View>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
+    flexDirection: "row",
+    justifyContent: "center",
     backgroundColor: "#fff",
     padding: 16,
     marginBottom: 12,
@@ -44,15 +60,31 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   image: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    marginBottom: 8,
+    width: 100,
+    height: 100,
+    borderRadius: 20,
+  },
+  infoWrapper: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  infoContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    gap: 5,
   },
   name: {
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 22,
     textAlign: "center",
+    paddingBottom: 10,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
   },
   subtext: {
     fontSize: 14,
