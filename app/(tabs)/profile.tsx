@@ -8,7 +8,7 @@ export default function ProfilePage() {
 
   async function handleLogout() {
     await logout();
-    router.replace("/auth"); // send them back to login
+    router.replace("/auth");
   }
 
   return (
@@ -16,15 +16,21 @@ export default function ProfilePage() {
 
       <View style={styles.infoBlock}>
         <Text style={styles.title}>My Profile</Text>
+ 
+          <View style={styles.wrapper}>
+            <Text style={styles.label}>Name</Text>
+            <Text style={styles.value}>{user?.name}</Text>
+          </View>
 
-        <Text style={styles.label}>Name</Text>
-        <Text style={styles.value}>{user?.name}</Text>
+          <View style={styles.wrapper}>
+            <Text style={styles.label}>Email</Text>
+            <Text style={styles.value}>{user?.email}</Text>
+          </View>
 
-        <Text style={styles.label}>Email</Text>
-        <Text style={styles.value}>{user?.email}</Text>
-
-        <Text style={styles.label}>Club</Text>
-        <Text style={styles.value}>{member?.club}</Text>
+          <View style={styles.wrapper}>
+            <Text style={styles.label}>Club</Text>
+            <Text style={styles.value}>{member?.club}</Text>
+          </View>
       </View>
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -43,18 +49,20 @@ const styles = StyleSheet.create({
 
   infoBlock: {
     marginTop: 40,
-    alignItems: "center",
+    justifyContent: "center",
+    gap: 30,
   },
 
   title: {
-    fontSize: 40,
+    fontSize: 60,
     marginBottom: 20,
+    marginTop: 10,
     fontWeight: "600",
     textAlign: "center",
   },
 
   label: {
-    fontSize: 18,
+    fontSize: 28,
     fontWeight: "600",
     marginTop: 15,
   },
@@ -71,6 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E53935",
     borderRadius: 10,
     alignSelf: "center",
+    marginBottom: 70
   },
 
   logoutText: {
@@ -78,4 +87,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
   },
+  wrapper: {
+  }
 });

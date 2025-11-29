@@ -72,21 +72,6 @@ export default function HomeScreen() {
         )}
       />
 
-      {/*<ScrollView>
-        <View style={{ padding: 16 }}>
-          {people.map((person) => (
-            <Link
-              key={person.$id}
-              href={`/(protected)/members/${person.$id}`}
-              asChild
-            >
-              <Card person={person} />
-            </Link>
-          ))}
-        </View>
-      </ScrollView>*/}
-
-
     </SafeAreaView>
   );
 }
