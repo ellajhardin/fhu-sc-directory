@@ -36,9 +36,7 @@ export default function HomeScreen() {
 
       const data = await appWriteService.getMembers(member.club);
 
-
       setPeople(data || []);
-
 
     } catch (error) {
       console.error("Error loading people:", error);
@@ -60,7 +58,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView>
-      <Text style={styles.title}>Directory</Text>
+      <Text style={styles.title}>{member?.club ? `${member.club.toUpperCase()} Directory` : "Directory"}</Text>
 
       <SearchBar value={search} onChange={setSearch} />
 
