@@ -18,8 +18,9 @@ const getAppWriteConfig = () => {
   const platform = process.env.EXPO_PUBLIC_APPWRITE_PLATFORM;
   const databaseId = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID;
   const membersTableId = process.env.EXPO_PUBLIC_APPWRITE_MEMBERS_TABLE_ID;
+  const eventsTableId = process.env.EXPO_PUBLIC_APPWRITE_EVENTS_TABLE_ID;
 
-  if (!endpoint || !projectId || !platform || !databaseId || !membersTableId) {
+  if (!endpoint || !projectId || !platform || !databaseId || !membersTableId || !eventsTableId) {
     throw new Error(
       "Missing required AppWrite environment variables. " +
         "Please check your .env file and ensure all EXPO_PUBLIC_APPWRITE_* variables are set."
@@ -32,6 +33,7 @@ const getAppWriteConfig = () => {
     platform,
     databaseId,
     membersTableId,
+    eventsTableId,
   };
 };
 
@@ -73,9 +75,21 @@ export type AppWriteConfig = {
   platform: string; // e.g. 'com.example.app'
   databaseId: string; // TablesDB database id
   membersTableId: string; // Members table id
+  eventsTableId: string; 
 };
 // The returned shape of the service for easy typing elsewhere
 export type AppWriteService = ReturnType<typeof createAppWriteService>;
+
+export interface EventRow extends Models.Row {
+  title: string;
+  date: string; 
+  time?: string;
+  location?: string;
+  description?: string;
+  club?: string; 
+}
+
+export type EventInput = Partial<EventRow>;
 
 export function createAppWriteService(config: AppWriteConfig) {
   const client = new Client()
@@ -85,6 +99,29 @@ export function createAppWriteService(config: AppWriteConfig) {
 
   const account = new Account(client);
   const tables = new TablesDB(client);
+
+  // Events
+  const getEvents = async (club?: string): Promise<EventRow[]> => {
+    try {
+      const queries = club ? [Query.equal("club", club), Query.orderAsc("date")] : [Query.orderAsc("date")];
+      // Create a new client without authentication for public access
+      const publicClient = new Client()
+        .setEndpoint(config.endpoint)
+        .setProject(config.projectId)
+        .setPlatform(config.platform);
+      const publicTables = new TablesDB(publicClient);
+
+      const response = await publicTables.listRows<EventRow>({
+        databaseId: config.databaseId,
+        tableId: config.eventsTableId,
+        queries,
+      });
+      return response.rows ?? [];
+    } catch (error) {
+      console.error("[getEvents] Error fetching events:", error);
+      return [];
+    }
+  };
 
   // AUTH
   const registerWithEmail = async ({
@@ -290,5 +327,7 @@ export function createAppWriteService(config: AppWriteConfig) {
 
     getMembers,
     getMemberById,
+
+    getEvents,
   };
 }

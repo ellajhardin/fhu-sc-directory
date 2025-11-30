@@ -1,21 +1,42 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useAuth } from "@/hooks/AuthContext";
+import { APPWRITE_CONFIG, createAppWriteService, EventRow } from "@/lib/appwrite";
+import { useEffect, useMemo, useState } from "react";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EventsPage() {
+  const [events, setEvents] = useState<EventRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { member } = useAuth();
+
+  const appwriteService = useMemo(() => createAppWriteService(APPWRITE_CONFIG), []);
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      const data = await appwriteService.getEvents();
+      setEvents(data);
+      setLoading(false);
+    };
+
+    loadEvents();
+  }, [appwriteService]);
+
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} size="large" />;
+
   return (
     <ScrollView style={styles.container}>
       <SafeAreaView>
-      <Text style={styles.title}>Upcoming Events</Text>
+        <Text style={styles.title}>All Events</Text>
 
-      <View style={styles.event}>
-        <Text style={styles.eventTitle}>Welcome Mixer</Text>
-        <Text style={styles.eventDate}>Jan 15 • 7 PM</Text>
-      </View>
-
-      <View style={styles.event}>
-        <Text style={styles.eventTitle}>Winter Retreat</Text>
-        <Text style={styles.eventDate}>Jan 30 • 9 AM</Text>
-      </View>
+        {events.map((event) => (
+          <View key={event.$id} style={styles.event}>
+            <Text style={styles.eventTitle}>{event.title}</Text>
+            <Text style={styles.eventDate}>
+              {event.date}
+              {event.time ? ` • ${event.time}` : ""}
+            </Text>
+          </View>
+        ))}
       </SafeAreaView>
     </ScrollView>
   );
@@ -33,4 +54,3 @@ const styles = StyleSheet.create({
   eventTitle: { fontSize: 18, fontWeight: "600" },
   eventDate: { fontSize: 14, color: "#555", marginTop: 4 },
 });
-
