@@ -10,7 +10,7 @@ export default function Card({ person }: { person: MemberRow }) {
   return (
     <TouchableOpacity style={styles.card}
       onPress={() => router.push(`/(protected)/members/${person.$id}`)}>
-      <Image source={{ uri: person.imageURL }} style={styles.image} />
+      <Image source={{ uri: person.imageURL || "https://randomuser.me/api/portraits/women/34.jpg" }} style={styles.image} />
 
     <View style={styles.infoWrapper}>
       <View style={styles.infoContainer}>

@@ -25,7 +25,8 @@ export default function ProfileDetailCard({ person }: { person: MemberRow }) {
         {person.firstName} {person.lastName}
       </Text>
 
-      <Image source={{ uri: person.imageURL }} style={styles.image} />
+      <Image source={{ uri: person.imageURL || "https://randomuser.me/api/portraits/women/34.jpg" }} style={styles.image}/>
+      {/*<Image source={{ uri: person.imageURL }} style={styles.image} />*/}
 
       <View style={styles.info}>
 
